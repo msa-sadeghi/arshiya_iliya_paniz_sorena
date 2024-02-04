@@ -1,6 +1,7 @@
 import turtle
 import time
 import random
+import os
 
 screen = turtle.Screen()
 screen.bgcolor("black")
@@ -73,12 +74,19 @@ screen.onkeypress(go_down, "s")
 screen.onkeypress(go_right, "d")
 screen.onkeypress(go_left, "a")
 score = 0
-highscore = 0
+if os.path.exists("score.txt"):
+    f= open("score.txt", "r")
+    highscore = int(f.read())
+else:
+    highscore = 0
 scoreboard = create_turtle("square", "white")
 scoreboard.ht()
 scoreboard.goto(0, 260)
 
 def end_game():
+    f = open("score.txt", "w")
+    f.write(str(highscore))
+    f.close()
     global run
     run = False
     
