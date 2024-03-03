@@ -49,7 +49,7 @@ while running:
     if rabbit_rect.colliderect(carrot_rect):
         carrot_rect.centerx = random.randint(0, SCREEN_WIDTH)
         carrot_rect.y = 700
-        # TODO
+        eat_sound.play()
         
     
         
