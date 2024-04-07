@@ -14,6 +14,7 @@ class Player:
         self.rect = self.image.get_rect(topleft=(x,y))
         self.gravity = 0
         self.update_time = pygame.time.get_ticks()
+        self.moving_or_not = False
         
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -23,9 +24,13 @@ class Player:
         dy = 0
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
+            self.moving_or_not = True
             dx -= 5
         if keys[pygame.K_RIGHT]:
+            self.moving_or_not = True
             dx += 5
+        if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
+            self.moving_or_not = False
         if keys[pygame.K_SPACE]:
             self.gravity = -13
         dy += self.gravity
@@ -38,7 +43,7 @@ class Player:
         if pygame.time.get_ticks() - self.update_time > 100:
             self.image_number += 1
             self.update_time = pygame.time.get_ticks()
-        if self.image_number >= len(self.right_images):
+        if self.image_number >= len(self.right_images) or self.moving_or_not == False:
             self.image_number = 0
         self.image = self.right_images[self.image_number]
         
