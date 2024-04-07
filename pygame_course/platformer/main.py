@@ -13,7 +13,7 @@ while running:
             running = False
     game_world.draw(screen) 
     game_player.draw(screen) 
-    game_player.update()      
+    game_player.update(game_world.tiles)      
     pygame.display.update()
     clock.tick(FPS)
     

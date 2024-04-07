@@ -19,7 +19,7 @@ class Player:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         
-    def update(self):
+    def update(self, tiles):
         dx = 0
         dy = 0
         keys = pygame.key.get_pressed()
@@ -34,7 +34,16 @@ class Player:
         if keys[pygame.K_SPACE]:
             self.gravity = -13
         dy += self.gravity
-        # self.gravity += 1
+        self.gravity += 1
+        
+        for t in tiles:
+            if t[1].colliderect(self.rect.x, self.rect.y + dy, self.rect.size[0], self.rect.size[1]):
+                self.gravity = 0
+                dy = t[1].top - self.rect.bottom
+            if t[1].colliderect(self.rect.x + dx, self.rect.y, self.rect.size[0], self.rect.size[1]):
+                dx = 0
+            
+        
         self.rect.x += dx
         self.rect.y += dy
         self.animation()
