@@ -1,6 +1,7 @@
 from constants import *
+from enemy import Enemy
 class World:
-    def __init__(self, data):
+    def __init__(self, data, enemy_group):
         self.tiles = []
         self.image = pygame.image.load("assets/background.png")
         for i in range(len(data)):
@@ -15,6 +16,8 @@ class World:
                     rect = image.get_rect(topleft=(j * 50, i * 50))
                     tile = (image, rect)
                     self.tiles.append(tile)
+                if data[i][j] == 3:
+                    Enemy(j * 50, i * 50 + 15, enemy_group)
                     
     def draw(self, screen):
         screen.blit(self.image,(0,0))

@@ -15,6 +15,7 @@ class Player:
         self.gravity = 0
         self.update_time = pygame.time.get_ticks()
         self.moving_or_not = False
+        self.direction = 1
         
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -24,9 +25,11 @@ class Player:
         dy = 0
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
+            self.direction = -1
             self.moving_or_not = True
             dx -= 5
         if keys[pygame.K_RIGHT]:
+            self.direction = 1
             self.moving_or_not = True
             dx += 5
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
@@ -38,8 +41,14 @@ class Player:
         
         for t in tiles:
             if t[1].colliderect(self.rect.x, self.rect.y + dy, self.rect.size[0], self.rect.size[1]):
-                self.gravity = 0
-                dy = t[1].top - self.rect.bottom
+                if self.gravity > 0:
+                    
+                    self.gravity = 0
+                    dy = t[1].top - self.rect.bottom
+                else:
+                    self.gravity = 0
+                    dy = t[1].bottom - self.rect.top
+                    
             if t[1].colliderect(self.rect.x + dx, self.rect.y, self.rect.size[0], self.rect.size[1]):
                 dx = 0
             
@@ -54,6 +63,9 @@ class Player:
             self.update_time = pygame.time.get_ticks()
         if self.image_number >= len(self.right_images) or self.moving_or_not == False:
             self.image_number = 0
-        self.image = self.right_images[self.image_number]
+        if self.direction == 1:
+            self.image = self.right_images[self.image_number]
+        elif self.direction == -1:
+            self.image = self.left_images[self.image_number]
         
         
