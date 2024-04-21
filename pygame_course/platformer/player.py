@@ -16,11 +16,15 @@ class Player:
         self.update_time = pygame.time.get_ticks()
         self.moving_or_not = False
         self.direction = 1
+        self.alive = True
+        self.ghost_image = pygame.image.load("assets/ghost.png")
         
     def draw(self, screen):
+        if not self.alive:
+            self.image = self.ghost_image
         screen.blit(self.image, self.rect)
         
-    def update(self, tiles):
+    def update(self, tiles, enemy_group):
         dx = 0
         dy = 0
         keys = pygame.key.get_pressed()
@@ -51,6 +55,8 @@ class Player:
                     
             if t[1].colliderect(self.rect.x + dx, self.rect.y, self.rect.size[0], self.rect.size[1]):
                 dx = 0
+        if pygame.sprite.spritecollide(self, enemy_group, True)    :
+            self.alive = False
             
         
         self.rect.x += dx
