@@ -18,13 +18,16 @@ class Player:
         self.direction = 1
         self.alive = True
         self.ghost_image = pygame.image.load("assets/ghost.png")
+        self.jump_sound = pygame.mixer.Sound("assets/jump.wav")
+        self.jumped = False
+        self.next_level = False
         
     def draw(self, screen):
         if not self.alive:
             self.image = self.ghost_image
         screen.blit(self.image, self.rect)
         
-    def update(self, tiles, enemy_group):
+    def update(self, tiles, enemy_group, door_group):
         dx = 0
         dy = 0
         keys = pygame.key.get_pressed()
@@ -38,8 +41,10 @@ class Player:
             dx += 5
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
             self.moving_or_not = False
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and not self.jumped:
             self.gravity = -13
+            self.jumped = True
+            self.jump_sound.play()
         dy += self.gravity
         self.gravity += 1
         
@@ -49,6 +54,7 @@ class Player:
                     
                     self.gravity = 0
                     dy = t[1].top - self.rect.bottom
+                    self.jumped = False
                 else:
                     self.gravity = 0
                     dy = t[1].bottom - self.rect.top
@@ -57,6 +63,8 @@ class Player:
                 dx = 0
         if pygame.sprite.spritecollide(self, enemy_group, True)    :
             self.alive = False
+        if pygame.sprite.spritecollide(self, door_group, False)    :
+            self.next_level = True
             
         
         self.rect.x += dx

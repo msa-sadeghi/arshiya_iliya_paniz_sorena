@@ -1,7 +1,8 @@
 from constants import *
 from enemy import Enemy
+from door import Door
 class World:
-    def __init__(self, data, enemy_group):
+    def __init__(self, data, enemy_group, door_group):
         self.tiles = []
         self.image = pygame.image.load("assets/background.png")
         for i in range(len(data)):
@@ -18,6 +19,8 @@ class World:
                     self.tiles.append(tile)
                 if data[i][j] == 3:
                     Enemy(j * 50, i * 50 + 15, enemy_group)
+                if data[i][j] == 4:
+                    Door(j * 50, i * 50 + 15, door_group)
                     
     def draw(self, screen):
         screen.blit(self.image,(0,0))
