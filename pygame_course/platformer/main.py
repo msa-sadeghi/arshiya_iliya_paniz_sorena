@@ -37,8 +37,8 @@ while running:
             door_group.empty()
             game_world = World(world_data, enemy_group, door_group)
     if game_player.next_level:
-        pass
-        # TODO
+        level += 1
+        game_world = go_to_next_level()   
                 
     enemy_group.update()     
     enemy_group.draw(screen)

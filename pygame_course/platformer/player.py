@@ -5,6 +5,9 @@ class Player:
         self.left_images = []
         for i in range(1,5):
             image = pygame.image.load(f"assets/guy{i}.png")
+            image_w = image.get_width()
+            image_h = image.get_height()
+            image = pygame.transform.scale(image, (image_w * 0.5, image_h * 0.5))
             self.right_images.append(image)
             image = pygame.transform.flip(image, True, False)
             self.left_images.append(image)
