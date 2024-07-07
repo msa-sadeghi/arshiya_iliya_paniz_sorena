@@ -2,6 +2,7 @@ from pygame.sprite import Sprite
 import pygame
 from bullet import Bullet
 import math
+from healthbar import HealthBar
 class Castle(Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -20,8 +21,10 @@ class Castle(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.sh = False
-        
+        self.healthbar = HealthBar(self.rect.centerx, self.rect.top, self.health, self.max_health)
+   
     def draw(self, screen):
+        self.healthbar.update(screen, self.health)
         screen.blit(self.image, self.rect)
         
     def shoot(self, group):
