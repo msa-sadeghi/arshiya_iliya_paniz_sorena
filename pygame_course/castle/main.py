@@ -1,5 +1,9 @@
 import pygame
 from castle import Castle
+from enemy import Enemy
+enemy_group = pygame.sprite.Group()
+enemy1 = Enemy("red_goblin", 100, 300, enemy_group, 2)
+
 pygame.init()
 
 SCREEN_WIDTH = 800
@@ -22,5 +26,7 @@ while running:
     my_castle.shoot(bullet_group) 
     bullet_group.update()    
     bullet_group.draw(screen)
+    enemy_group.update()
+    enemy_group.draw(screen)
     pygame.display.update()
     clock.tick(FPS)
