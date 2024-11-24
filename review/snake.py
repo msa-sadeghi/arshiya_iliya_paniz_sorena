@@ -21,6 +21,22 @@ class Food:
 
 
 
+def check_game_over(snake):
+    x,y = snake.coordinates[0]
+    if x < 0 or x > GAME_WIDTH:
+        return True
+    if y < 0 or y > GAME_HEIGHT:
+        return True
+    
+    for s_q in snake.coordinates[1:]:
+        if x == s_q[0] and y == s_q[1]:
+            return True
+    return False
+            
+def game_over():
+    canvas.delete("all")
+    canvas.create_text(canvas.winfo_width()//2, canvas.winfo_height()//2, font=("arial", 24), text="GAME OVER", fill="red")
+
 def next_turn(snake, food):
     x,y = snake.coordinates[0]
     if direction == "up":
@@ -46,10 +62,11 @@ def next_turn(snake, food):
         canvas.delete(snake.squares[-1])
         del snake.squares[-1]
         
-            
-        
+    if check_game_over(snake)        :
+        game_over()
+    else:    
     
-    window.after(200, next_turn, snake, food)
+        window.after(200, next_turn, snake, food)
 
 def change_direction(new_dir):
     global direction
