@@ -34,7 +34,22 @@ def next_turn(snake, food):
     snake.coordinates.insert(0, [x,y])
     square =  canvas.create_rectangle(x,y, x + SPACE_SIZE, y + SPACE_SIZE, fill="green", tag = "snake")
     snake.squares.insert(0, square)
-    #TODO
+    
+    if x == food.coordinate[0] and y == food.coordinate[1]:
+        global score
+        score += 1
+        label.config(text=f"Score: {score}")
+        canvas.delete("food")
+        food = Food()
+    else:
+        del snake.coordinates[-1]
+        canvas.delete(snake.squares[-1])
+        del snake.squares[-1]
+        
+            
+        
+    
+    window.after(200, next_turn, snake, food)
 
 def change_direction(new_dir):
     global direction
@@ -76,7 +91,14 @@ window_height = window.winfo_height()
 x = screen_width//2 - window_width//2
 y = screen_height//2 - window_height //2
 
+window.bind("<Up>",lambda e: change_direction("up"))
+window.bind("<Down>",lambda e: change_direction("down"))
+window.bind("<Left>",lambda e: change_direction("left"))
+window.bind("<Right>",lambda e: change_direction("right"))
+
+
 window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 snake = Snake()
 food = Food()
+next_turn(snake, food)
 window.mainloop()
