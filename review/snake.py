@@ -48,7 +48,7 @@ def next_turn(snake, food):
     if direction == "right":
         x += SPACE_SIZE
     snake.coordinates.insert(0, [x,y])
-    square =  canvas.create_rectangle(x,y, x + SPACE_SIZE, y + SPACE_SIZE, fill="green", tag = "snake")
+    square = canvas.create_rectangle(x,y, x + SPACE_SIZE, y + SPACE_SIZE, fill="green", tag = "snake")
     snake.squares.insert(0, square)
     
     if x == food.coordinate[0] and y == food.coordinate[1]:
