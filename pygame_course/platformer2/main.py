@@ -12,6 +12,7 @@ while running == True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        #TODO
     player.draw(screen)       
     pygame.display.update()
     clock.tick(FPS)
