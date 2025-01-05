@@ -28,9 +28,14 @@ class Character(Sprite):
         self.image_number = 0
         self.action = "Idle"
         self.last_image_change_time = 0
+        self.direction = 1
+        self.flip = False
+        self.yvel = 0
+        self.in_air = False
     def draw(self, screen):
-        self.image = self.all_images[self.action][self.image_number]
-        screen.blit(self.image, self.rect)
+        img = self.all_images[self.action][self.image_number]
+        img = pygame.transform.flip(img, self.flip, False)
+        screen.blit(img, self.rect)
         self.animation()
         
             
@@ -46,5 +51,34 @@ class Character(Sprite):
             self.action = new_action
             self.image_number = 0
             self.last_image_change_time = pygame.time.get_ticks()
+            
+    def move(self, moving_left, moving_right):
+        dx = 0
+        dy = 0
+        if moving_left:
+            self.direction = -1
+            self.flip = True
+            dx -= 5
+        if moving_right:
+            self.direction = 1
+            self.flip = False
+            dx += 5
+        self.yvel += 1
+        dy += self.yvel
+        
+        if self.rect.bottom + dy > 300:
+            dy = 300 - self.rect.bottom
+            self.yvel = 0
+            self.in_air = False
+        
+        self.rect.y += dy    
+        self.rect.x += dx
+        
+    def shoot(self):
+        # TODO IMPLEMENT CREATING Bullets
+        pass
+        
+        
+            
             
      
