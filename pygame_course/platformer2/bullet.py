@@ -6,7 +6,7 @@ class Bullet(Sprite):
         super().__init__()
         self.owner = owner
         self.image = pygame.image.load("assets/img/icons/bullet.png")
-        self.rect = self.image.get_rect(tolpeft=(x,y))
+        self.rect = self.image.get_rect(topleft=(x,y))
         self.direction = direction
         group.add(self)
         

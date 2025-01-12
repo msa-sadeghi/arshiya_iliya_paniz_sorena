@@ -4,11 +4,12 @@ from character import Character
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
-
+player_bullet_group = pygame.sprite.Group()
 player = Character("player", 100, 300, 5, 60, 10)
 moving_left = False
 moving_right = False
 jump = False
+shoot_bullet = False
 running = True
 while running == True:
     for event in pygame.event.get():
@@ -21,6 +22,8 @@ while running == True:
                 moving_right = True
             if event.key == pygame.K_UP:
                 jump = True
+            if event.key == pygame.K_SPACE:
+                shoot_bullet = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 moving_left = False
@@ -28,6 +31,8 @@ while running == True:
                 moving_right = False
             if event.key == pygame.K_UP:
                 jump = False
+            if event.key == pygame.K_SPACE:
+                shoot_bullet = False
     if moving_left or moving_right:
         player.change_action("Run")
     elif jump:
@@ -37,8 +42,12 @@ while running == True:
         player.change_action("Idle")
     if player.in_air:
         player.change_action("Jump")
+    if shoot_bullet:
+        player.shoot(player_bullet_group)
     screen.fill((0,0,0))
     player.move(moving_left, moving_right)            
-    player.draw(screen)       
+    player.draw(screen)  
+    player_bullet_group.update()
+    player_bullet_group.draw(screen)     
     pygame.display.update()
     clock.tick(FPS)
