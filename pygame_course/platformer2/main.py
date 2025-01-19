@@ -1,7 +1,7 @@
 import pygame
 from config import * 
 from character import Character
-
+grenade_group = pygame.sprite.Group()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 player_bullet_group = pygame.sprite.Group()
@@ -10,6 +10,7 @@ moving_left = False
 moving_right = False
 jump = False
 shoot_bullet = False
+shoot_grenade = False
 running = True
 while running == True:
     for event in pygame.event.get():
@@ -24,6 +25,8 @@ while running == True:
                 jump = True
             if event.key == pygame.K_SPACE:
                 shoot_bullet = True
+            if event.key == pygame.K_g:
+                shoot_grenade = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 moving_left = False
@@ -33,6 +36,8 @@ while running == True:
                 jump = False
             if event.key == pygame.K_SPACE:
                 shoot_bullet = False
+            if event.key == pygame.K_g:
+                shoot_grenade = False
     if moving_left or moving_right:
         player.change_action("Run")
     elif jump:
@@ -43,11 +48,15 @@ while running == True:
     if player.in_air:
         player.change_action("Jump")
     if shoot_bullet:
-        player.shoot(player_bullet_group)
+        player.shoot("bullet",player_bullet_group)
+    if shoot_grenade:
+        player.shoot("grenade", grenade_group)
     screen.fill((0,0,0))
     player.move(moving_left, moving_right)            
     player.draw(screen)  
     player_bullet_group.update()
     player_bullet_group.draw(screen)     
-    pygame.display.update()
+    grenade_group.update()
+    grenade_group.draw(screen)     
+    pygame.display.update() 
     clock.tick(FPS)

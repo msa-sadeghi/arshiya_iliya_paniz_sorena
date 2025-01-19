@@ -9,8 +9,14 @@ class Grenade(Sprite):
         self.speed = 4
         self.direction = direction
         group.add(self)
+        self.gravity = -13
         
         
     def update(self):
-        pass
+        dx = self.direction * self.speed
+        dy = self.gravity
+        self.gravity += 1
+        self.rect.x += dx
+        self.rect.y += dy
+        
         

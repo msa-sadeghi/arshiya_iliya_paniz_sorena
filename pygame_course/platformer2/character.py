@@ -2,6 +2,7 @@ from pygame.sprite import Sprite
 import pygame
 import os
 from bullet import Bullet
+from grenade import Grenade
 class Character(Sprite):
     def __init__(self, type, x,y, speed, ammo, grenades):
         self.alive = True
@@ -34,6 +35,7 @@ class Character(Sprite):
         self.yvel = 0
         self.in_air = False
         self.last_bullet_shoot_time = 0
+        self.last_grenade_shoot_time = 0
     def draw(self, screen):
         img = self.all_images[self.action][self.image_number]
         img = pygame.transform.flip(img, self.flip, False)
@@ -76,16 +78,26 @@ class Character(Sprite):
         self.rect.y += dy    
         self.rect.x += dx
         
-    def shoot(self, weapon_group):
-        if self.ammo > 0 and pygame.time.get_ticks() - self.last_bullet_shoot_time > 100:
-            self.last_bullet_shoot_time = pygame.time.get_ticks()
-            self.ammo -= 1
-            Bullet(self.type, 
-                self.rect.centerx + self.direction * self.rect.size[0],
-                self.rect.centery,
-                weapon_group, 
-                self.direction
-                )
+    def shoot(self,weapon_type, weapon_group):
+        if weapon_type == "bullet":
+            if self.ammo > 0 and pygame.time.get_ticks() - self.last_bullet_shoot_time > 100:
+                self.last_bullet_shoot_time = pygame.time.get_ticks()
+                self.ammo -= 1
+                Bullet(self.type, 
+                    self.rect.centerx + self.direction * self.rect.size[0],
+                    self.rect.centery,
+                    weapon_group, 
+                    self.direction
+                    )
+        if weapon_type == "grenade" :
+            if self.grenades > 0 and pygame.time.get_ticks() - self.last_grenade_shoot_time > 100:
+                self.last_grenade_shoot_time = pygame.time.get_ticks()
+                self.grenades -= 1
+                Grenade( self.rect.centerx + self.direction * 30,
+                        self.rect.top,
+                        weapon_group,
+                        self.direction
+                        )
         
             
             
