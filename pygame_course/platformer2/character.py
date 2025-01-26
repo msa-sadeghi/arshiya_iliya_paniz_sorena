@@ -5,6 +5,7 @@ from bullet import Bullet
 from grenade import Grenade
 class Character(Sprite):
     def __init__(self, type, x,y, speed, ammo, grenades):
+        super().__init__()
         self.alive = True
         self.health = 100
         self.max_health = 100
@@ -98,7 +99,9 @@ class Character(Sprite):
                         weapon_group,
                         self.direction
                         )
-        
+    def check_alive(self):
+        if self.health <= 0:
+            self.alive = False   
             
             
      
