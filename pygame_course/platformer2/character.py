@@ -37,6 +37,9 @@ class Character(Sprite):
         self.in_air = False
         self.last_bullet_shoot_time = 0
         self.last_grenade_shoot_time = 0
+        self.enemy_movement_time = 0
+        self.idle = False
+        self.shoot_state = False
     def draw(self, screen):
         img = self.all_images[self.action][self.image_number]
         img = pygame.transform.flip(img, self.flip, False)
@@ -45,13 +48,14 @@ class Character(Sprite):
         
             
     def animation(self):
+        
         if pygame.time.get_ticks() - self.last_image_change_time > 100:
             self.image_number += 1
             if self.image_number >= len(self.all_images[self.action]):
                 self.image_number = 0
             self.last_image_change_time = pygame.time.get_ticks()
         
-    def change_action(self, new_action)   :
+    def change_animation(self, new_action)   :
         if self.action != new_action:
             self.action = new_action
             self.image_number = 0
@@ -79,6 +83,25 @@ class Character(Sprite):
         self.rect.y += dy    
         self.rect.x += dx
         
+    
+    def ai(self, player):
+        
+        d = self.rect.x  - player.rect.x
+        distance = abs(d) 
+        if distance >= 150:
+            if pygame.time.get_ticks() - self.enemy_movement_time > 100:
+                self.enemy_movement_time = pygame.time.get_ticks()
+                if d < 0:
+                    self.move(False, True)
+                else:
+                    self.move(True, False)
+                self.idle = False
+        else:
+            self.idle = True
+            self.shoot_state = True
+            
+            
+            
     def shoot(self,weapon_type, weapon_group):
         if weapon_type == "bullet":
             if self.ammo > 0 and pygame.time.get_ticks() - self.last_bullet_shoot_time > 100:
