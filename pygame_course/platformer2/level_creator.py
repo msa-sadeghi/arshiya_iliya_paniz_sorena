@@ -15,7 +15,7 @@ ROWS = 16
 MAX_COLS = 150
 TILE_SIZE = SCREEN_HEIGHT // ROWS
 
-
+current_tile = 0
 screen = pygame.display.set_mode((SCREEN_WIDTH  + SIDE_MARGIN, SCREEN_HEIGHT + LOWER_MARGIN))
 
 bg1 = pygame.image.load("./assets/img/background/pine1.png")
@@ -63,6 +63,20 @@ for i in range(21):
     buttons_list.append(btn)
 
 
+world_data = []
+for i in range(ROWS):
+    r = [-1] * MAX_COLS
+    world_data.append(r)
+for i in range(MAX_COLS):
+    world_data[-1][i] = 0
+
+def draw_world():
+    for i in range(len(world_data)):
+        for j in range(len(world_data[i])):
+            if world_data[i][j] >= 0:
+                screen.blit(images_list[world_data[i][j]], (j * TILE_SIZE - scroll, i * TILE_SIZE))
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -89,8 +103,18 @@ while running:
         scroll += scroll_speed * 5
     draw_bg()
     draw_grid()
+    draw_world()
     pygame.draw.rect(screen, "lightgreen", (SCREEN_WIDTH, 0, SIDE_MARGIN, LOWER_MARGIN + SCREEN_HEIGHT))
     for i in range(21):
-        buttons_list[i].draw(screen)
-    
+        if buttons_list[i].draw(screen):
+            current_tile = i
+    mouse_pos = pygame.mouse.get_pos()
+    col_number = (mouse_pos[0] + scroll) // TILE_SIZE
+    row_number = mouse_pos[1] // TILE_SIZE
+    if pygame.mouse.get_pressed()[0]:
+        if world_data[row_number][col_number] != current_tile:
+            world_data[row_number][col_number] = current_tile
+    if pygame.mouse.get_pressed()[2]:
+        world_data[row_number][col_number] = -1
+    pygame.draw.rect(screen, "red", buttons_list[current_tile].rect, 3)
     pygame.display.update()

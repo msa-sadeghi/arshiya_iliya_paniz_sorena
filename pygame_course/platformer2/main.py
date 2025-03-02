@@ -16,6 +16,7 @@ moving_right = False
 jump = False
 shoot_bullet = False
 shoot_grenade = False
+level = 1
 running = True
 while running == True:
     for event in pygame.event.get():
